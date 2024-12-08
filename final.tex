@@ -1,0 +1,298 @@
+\documentclass[letter,8pt,landscape]{article}
+\usepackage{fontspec}
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel} 
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{enumitem} % for spacing for enumerate
+\usepackage{upgreek} % For the upper tau character
+\usepackage{graphicx}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.1in,left=.1in,right=.1in,bottom=.1in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} } {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{3}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\vfill
+\smallskip
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%% Equation Reference %%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section{\underline{Equation Reference}}
+
+  \subsection{Mosfet Theory}
+  \textbf{Long-channel/Ideal/First-order/Shockley model}
+  \begin{align*}
+    I_{_{ds}} &= \beta\left(V_{_{GT}} - V_{_{ds}}/2\right)V_{_{ds}} \\
+              &=  \mu C_{_{ox}} \frac{W}{L}\left(V_{_{gs}} - V_{_{t}} - V_{_{ds}}/2\right)V_{_{ds}}
+  \end{align*}
+  If $V_{_{ds}}>V_{dsat}\equiv V_{_{GT}}$ and we say the drain is \textit{pinched off}. Subbing this equivalence gets the $I_{_{ds}}$ for saturation mode.
+
+  \[ I_{ds} = 
+  \begin{cases}
+      0 & V_{gs} <V_t \ \ \ \ \ \text{Cutoff} \\
+      \beta \left( V_{_{GT}} - \frac{V_{ds}}{2} \right)V_{ds} & V_{ds} < V_{dsat} \ \text{Linear} \\
+      \frac{\beta}{2} V_{_{GT}}^2 & V_{ds} > V_{dsat} \ \text{Saturation}
+  \end{cases}
+  \]
+  Noise Margins:
+  
+  $NM_L = V_{IL} - V_{OL}$
+  $NM_H = V_{OH} - V_{IH}$
+
+
+  \subsubsection{Effort \& Delay}
+  \hspace*{-0.1in}\begin{tabular}{ |c|c|c| } 
+    \hline
+    Term & Stage & Path \\ 
+    \hline
+    Number of Stages & 1 & N \\ 
+    Logical Effort & g & G = $\Pi g_i$ \\ 
+    Electrical Effort & $h=\frac{C_{out}}{C_{in}}$ & $H=\frac{C_{out-path}}{C_{in-path}}$ \\ 
+    Branching Effort & $b=\frac{C_{\text{on-path}}+C_{\text{off-path}}}{C_{\text{on-path}}}$ & $B=\Pi b_i$ \\ 
+    Effort & $f=gh$ & $F=GBH$ \\ 
+    Effort Delay & $f$ & $D_F=\Sigma f_i$ \\ 
+    Parasitic Delay & $p$ & $P = \Sigma p_i$ \\ 
+    Delay & $d=f+p$ & $D=\Sigma d_i = D_F + P$ \\ 
+    \hline
+  \end{tabular}
+  \begin{enumerate}[itemsep=0pt, parsep=0pt]
+    \item Compute Path Effort:  $F=GBH$
+    \item Estimate best number of stages:  $N=log_4 F$
+    \item Sketch path with N Stages
+  \item Estimate Least Delay:  $D=NF^{\frac{1}{N}} + P$
+    \item Determine best stage effort Best Stage EFfort:  $\hat{f}=F^{\frac{1}{N}}$.
+    \item Find gate sizes:  $C_{in} = \frac{g_i C_{out}}{f}$
+  \end{enumerate}
+  \subsubsection{Logical Effort (Common Gates)}
+  \begin{tabular}{ |c|c|c|c|} 
+    \hline
+    Gate Type & 1 in & 2 in & $n$ in \\ 
+    \hline
+    Inverter & 1 & & \\ 
+    NAND & & $\frac{4}{3}$ & $\frac{n + 2}{3}$ \\ 
+    NOR & &  $\frac{5}{3}$ & $\frac{2n + 1}{3}$  \\ 
+    Tristate,Multiplexer & 2 & 2 & 2 \\ 
+    XOR,XNOR & & 4,4 & 6,12,16 (3 in), ??? ($n$ in) \\ 
+    \hline
+  \end{tabular}
+  \subsubsection{Parasitic Delay}
+  \begin{center}
+    \begin{tabular}{ |c|c|c|c|} 
+      \hline
+      Gate Type & 1 in & 2 in & $n$ in \\ 
+      \hline
+      Inverter & 1 & & \\ 
+      NAND & & 2 & n \\ 
+      NOR & & 2 & n \\ 
+      Tristate,Multiplexer & 2 & 4 & 2n \\ 
+      \hline
+    \end{tabular}\\
+  \end{center}
+  \textbf{\*Note} These values are relative to ($1=\uptau=3RC$) \\
+  \textbf{\*Note} Parasitic Capacitance changes due to \textit{Shared Diffusion (See 4.3.6)}
+
+  \subsection{Power \& Switching*}
+
+  $E_{C} = CV_{DD}^2$ (Inverter Power Supply)\\ % Eq 5.8
+  $E_{C} = \frac{1}{2}CV_{DD}^2$ (Capacitor)\\ % Eq 5.7
+  $P_{switching} = \frac{E}{T} = CV_{DD}^2f_{sw}=\alpha CV_{DD}^2f$ % Eq 5.9 + 5.10
+
+  $\alpha_i = \bar{P_i}P_i$ % Eq 5.14
+
+  \begin{center}
+    \begin{tabular}{ |c|c| } % Table 5.1
+      \hline
+      Gate & $P_\gamma$ \\
+      \hline
+      AND2 & $P_AP_B$ \\
+      AND3 & $P_AP_BP_C$ \\
+      OR2 & $1-\bar{P_A}\bar{P_B}$ \\
+      NAND2 & $1-P_AP_B$ \\
+      NOR2 & $\bar{P_A}\bar{P_B}$ \\
+      XOR2 & $P_A\bar{P_B}+\bar{P_A}P_B$ \\
+      \hline
+    \end{tabular}\\
+  \end{center}
+
+  \subsection{Delay \& Timing}
+
+  \textit{Propagation delay time}, $t_{_{pd}}$ = max time input crossing 50\% to output crossing 50\%
+
+\textit{Contamination delay time}, $t_{_{cd}}$ = min time input crossing 50\% output crossing 50\%
+
+\textit{Rise time}, $t_{_{r}}$ = time waveform rises from 20\% -> 80\% new steady state
+
+\textit{Fall time}, $t_{_{f}}$ = time waveform falls from 80\% -> 20\% for new steady-state
+
+\textit{Edge rate}, $t_{_{rf}} = \frac{t_{_{r}} + t_{_{f}} }{2}$
+
+\textbf{(Flip Flop Timing)}\\
+$t_{pd} \le T_c - \underbrace{\left(t_{pcq} + t_{setup} + t_{skew}\right)}_\text{seq overhead}$ \\
+$t_{cd} \ge t_{hold} - t_{ccq} + t_{skew}$
+
+%TODO Latch timing?
+
+  \subsection{Datapath Subsystems}
+
+  \textbf{Adder Logic}:\\
+  $G=A \cdot B$ (\textbf{G}enerate)\\ % Section 11.2.1
+  $P=A\oplus B$ (\textbf{P}ropagate)\\
+  $K=\bar{A+B}$ (\textbf{K}ill)\\
+  $S=P\oplus C$ (\textbf{S}um)\\ % Eq 11.2
+  $C_{out}=MAJ(A,B,C)$ (\textbf{C}arry)\\
+
+  Using Carry Generation and Propagation
+  $G_{i:j} = G_{i:k} + P_{i:k}\cdot G_{k-1:j}$\\ % Eq 11.4
+  $P_{i:j} = P_{i:k}\cdot P_{k-1:j}$\\
+  where base case:
+  $G_{i:j} = G_i = A_i\cdot B_i$ and $P_{i:i} = P_i = A_i \oplus B_i$\\ % Eq 11.5
+
+  % Table 11.3
+  % TABLE EXCLUDED BECAUSE MAYBE NOT SO USEFUL. READ 11.2.2.13
+  %\hspace*{-0.1in}\begin{tabular}{ |c|c|c|c|c|c| } 
+  %  \hline
+  %  Architecture & Classification & Logic Levels & Max Fanout & Tracks & Cells \\ 
+  %  \hline
+  %  Carry-Ripple & & N - 1 & 1 & 1 & N \\ 
+  %  Carry-Skip (n=4) & & N/4 + 5 & 2 & 1 & 1.25N \\ 
+  %  Carry-Increment (n=4) & & N/4 + 2 & 4 & 1 & 2N \\ 
+  %  Carry-Increment (variable group) & & $\sqrt{N/4}$ & 4 & 1 & 2N \\ 
+  %  %... more, 
+  %  \hline
+  %\end{tabular}
+
+  % Eq 11.30
+  \vspace*{-0.25in}
+  \begin{center}
+    \begin{tabular}{ c c } 
+      Binary $\rightarrow$ Gray & Gray $\rightarrow$ Binary \\
+      $G_{N-1} = B_{N-1}$ & $B_{N-1} = G_{N-1}$ \\
+      $G_{i} = B_{i+1} \oplus B_i$ & $B_{i} = B_{i+1} \oplus G_i$   $N-1 > i \ge 0$\\ 
+    \end{tabular}
+  \end{center}
+
+  %TODO Add CPA timings?
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%% Closer Details + Figures %%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \section{\underline{Closer Details \& Figures}}
+
+
+  \subsection{Mosfet Theory}
+  %\includegraphics[width=1.7in]{images/mos-regions.png}
+  \hspace{-0.24in}\includegraphics[width=3.7in]{images/nmos-operation-modes-and-regions.png}
+
+  \includegraphics[width=3.65in]{images/diffusion-geometries.png}
+
+
+
+  \subsection{Delay}
+  \includegraphics[width=2in]{images/prop-delay.png}
+
+
+
+  \subsubsection{Equivalent RC Circuits}
+  \includegraphics[width=3.5in]{images/transistor-equiv-rc.png}
+  % include a mention on 4.2 on transient response
+
+  \textbf{Elmore Delay}
+  $$t_{_{pd}} = \sum_i R_{_{is}}C_{_{i}}$$
+
+  \subsubsection{Logic Gates}
+  \includegraphics[width=3.5in]{images/inverting-mux.png}
+  \includegraphics[width=3.5in]{images/inverter-cross-section.png}
+  \includegraphics[width=3.5in]{images/simplified-lambda-layout.png}
+  \includegraphics[width=3.5in]{images/iv-characteristics.png}
+  \includegraphics[width=3.5in]{images/cmos-inverter-characteristics.png}
+  %TODO Add Table 2.3
+  \includegraphics[width=3.5in]{images/noise-margin-def.png}
+  \includegraphics[width=3.5in]{images/noise-margin-def.png}
+  \includegraphics[width=3.5in]{images/pass-transistor-dc-characteristics.png}
+  \includegraphics[width=3.5in]{images/inverter-power-graphs.png}
+  \includegraphics[width=3.5in]{images/skewed-gates.png}
+  \includegraphics[width=3.5in]{images/psuedo-nmos-logic.png}
+  \includegraphics[width=3.5in]{images/ganged-nor.png}
+  % Table 9.1
+  \vspace*{-0.25in}
+  \begin{center}
+    \begin{tabular}{ |c|c|c| } 
+      \hline
+      A & B & Y \\
+      \hline
+      0 & 0 & 1 \\
+      \hline
+      0 & 1 & ~0 \\
+      \hline
+      1 & 0 & ~0 \\
+      \hline
+      1 & 1 & 0 \\
+      \hline
+    \end{tabular}
+  \end{center}
+  \includegraphics[width=3.5in]{images/cvsl.png}
+  \includegraphics[width=3.5in]{images/logic-comparison.png}
+  \includegraphics[width=3.5in]{images/dynamic-gates.png}
+  \includegraphics[width=3.5in]{images/incorrect-domino.png}
+  \includegraphics[width=3.5in]{images/domino.png}
+  \includegraphics[width=3.5in]{images/ff-latch-timing.png}
+  \includegraphics[width=3.5in]{images/conventional-ff.png}
+  \includegraphics[width=3.5in]{images/reset-latch-set-ff.png}
+  \includegraphics[width=3.5in]{images/full-adder.png}
+  \includegraphics[width=3.5in]{images/carry-ripple-adder.png}
+  \includegraphics[width=3.5in]{images/carry-skip-adder.png}
+  \includegraphics[width=3.5in]{images/carry-lookahead-adder.png}
+  \includegraphics[width=3.5in]{images/carry-select-adder.png}
+  \includegraphics[width=3.5in]{images/barrel-shifter.png}
+  \includegraphics[width=3.5in]{images/memory-array.png}
+  \includegraphics[width=3.5in]{images/sram.png}
+  \includegraphics[width=3.5in]{images/sense-amplifier.png}
+  \includegraphics[width=3.5in]{images/dram-array.png}
+  \includegraphics[width=3.5in]{images/programmable-gate.png}
+  \includegraphics[width=3.5in]{images/flash.png}
+  
+
+
+
+
+\end{multicols}
+
+\end{document}
+
