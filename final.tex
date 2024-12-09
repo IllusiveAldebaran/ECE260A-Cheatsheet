@@ -164,9 +164,19 @@
 
 \textit{Edge rate}, $t_{_{rf}} = \frac{t_{_{r}} + t_{_{f}} }{2}$
 
-\textbf{(Flip Flop Timing)}\\
+\textbf{(Flip Flop Timing)}\\% Eq 10.14, 10.15, 10.16
 $t_{pd} \le T_c - \underbrace{\left(t_{pcq} + t_{setup} + t_{skew}\right)}_\text{seq overhead}$ \\
 $t_{cd} \ge t_{hold} - t_{ccq} + t_{skew}$
+
+\textbf{(2 Phase Latch Timing)}\\
+$t_{pd} \le T_c - \underbrace{\left(2t_{pdq}\right)}_\text{seq overhead}$ \\
+  $t_{cd1},t_{cd2} \ge t_{hold} - t_{ccq} - t_{nonoverlap} + t_{skew}$\\
+  $t_{borrow} \le \frac{T_c}{2} - \left( t_{setup} + t_{nonoverlap} + t_{skew} \right)$
+
+\textbf{(Pulsed Latches Timing)}\\% Eq 10.17, 10.18, 10.19
+$t_{pd} \le T_c - \underbrace{\text{max}\left(t_{pdq}, t_{pcq} + t_{setup} - t_{pw} + t_{skew}\right)}_\text{seq overhead}$ \\
+  $t_{cd} \ge t_{hold} + t_{pw} - t_{ccq} + t_{skew}$\\
+  $t_{borrow} \le t_{pw} - \left( t_{setup} + t_{skew} \right)$
 
 %TODO Latch timing?
 
@@ -244,7 +254,6 @@ $t_{cd} \ge t_{hold} - t_{ccq} + t_{skew}$
   \includegraphics[width=3.5in]{images/cmos-inverter-characteristics.png}
   %TODO Add Table 2.3
   \includegraphics[width=3.5in]{images/noise-margin-def.png}
-  \includegraphics[width=3.5in]{images/noise-margin-def.png}
   \includegraphics[width=3.5in]{images/pass-transistor-dc-characteristics.png}
   \includegraphics[width=3.5in]{images/inverter-power-graphs.png}
   \includegraphics[width=3.5in]{images/skewed-gates.png}
@@ -272,7 +281,9 @@ $t_{cd} \ge t_{hold} - t_{ccq} + t_{skew}$
   \includegraphics[width=3.5in]{images/dynamic-gates.png}
   \includegraphics[width=3.5in]{images/incorrect-domino.png}
   \includegraphics[width=3.5in]{images/domino.png}
+  \includegraphics[width=3.5in]{images/seq-types.png}
   \includegraphics[width=3.5in]{images/ff-latch-timing.png}
+  \includegraphics[width=3.5in]{images/pulse-latch-timing.png}
   \includegraphics[width=3.5in]{images/conventional-ff.png}
   \includegraphics[width=3.5in]{images/reset-latch-set-ff.png}
   \includegraphics[width=3.5in]{images/full-adder.png}
@@ -287,6 +298,7 @@ $t_{cd} \ge t_{hold} - t_{ccq} + t_{skew}$
   \includegraphics[width=3.5in]{images/dram-array.png}
   \includegraphics[width=3.5in]{images/programmable-gate.png}
   \includegraphics[width=3.5in]{images/flash.png}
+  \includegraphics[width=3.5in]{images/Buff-Jeldon.jpeg}
   
 
 
